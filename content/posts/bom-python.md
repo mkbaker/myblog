@@ -23,9 +23,23 @@ Let's solve number 2 first, since we can use the offending file as a control.
 
 ## Python fix
 
-r.encoding='utf-8-sig'
+This took me forever to figure out -- but there is a simple solution! 
+
+The trick is to include `errors="ignore"` when opening the file. This example is shamelessly copied from [this excellent Stack Overflow answer:](https://stackoverflow.com/questions/30922721/remove-all-characters-which-cannot-be-decoded-in-python)
+
+```
+with open('filename', 'r', encoding='utf8', errors='ignore') as f:
+    ...
+```
+
+This tells python to ignore any characters that would usually throw an error. This will ignore the BOM, and as an added bonus, any other character that would mess up your code -- emojis, etc. 
 
 ## Programatically remove BOM
 
+Since the code is now ignoring the BOM as well as any other undefined characters, one could argue that it isn't necessary to remove the BOM from your files. But why contribute to tech debt? 
 
+You can remove a BOM from a string with a simple replace() method:
+```
+myString = myString.replace('\ufeff', '')
+```
 
